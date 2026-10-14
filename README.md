@@ -1,6 +1,8 @@
 # Fossify Messages
 <img alt="Logo" src="graphics/icon.webp" width="120" />
 
+> **Personal fork.** This fork adds a **Blocked messages** screen. SMS (and the text of MMS) caught by the in-app filters (blocked keywords, in-app blocked numbers, unknown senders) are stored in the app's own database instead of being dropped, with no notification and never in the system SMS provider. You can browse them grouped by sender, see why each was blocked, copy text, delete messages or senders, delete all, or restore messages to the inbox. See *Settings → Keep blocked messages* (on by default, with optional auto-delete). The app id is suffixed with `.blocked` so it installs next to the official app. Messages already blocked by Android's system block list never reach the app and can't be captured.
+
 <a href='https://play.google.com/store/apps/details?id=org.fossify.messages'><img alt='Get it on Google Play' src='https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png' height=80/></a> <a href="https://f-droid.org/packages/org.fossify.messages/"><img src="https://fdroid.gitlab.io/artwork/badge/get-it-on-en.svg" alt="Get it on F-Droid" height=80/></a> <a href="https://apt.izzysoft.de/fdroid/index/apk/org.fossify.messages"><img src="https://gitlab.com/IzzyOnDroid/repo/-/raw/master/assets/IzzyOnDroid.png" alt="Get it on IzzyOnDroid" height=80/></a>
 
 Fossify Messages is your trusted messaging companion, designed to enhance your messaging experience in various ways.
