@@ -19,7 +19,6 @@ import org.fossify.messages.extensions.blockedMessagesDB
 import org.fossify.messages.extensions.getBlockedConversations
 import org.fossify.messages.extensions.purgeExpiredBlockedMessages
 import org.fossify.messages.helpers.BLOCKED_ADDRESS
-import org.fossify.messages.helpers.BLOCKED_TITLE
 import org.fossify.messages.models.Conversation
 
 class BlockedMessagesActivity : SimpleActivity() {
@@ -131,7 +130,6 @@ class BlockedMessagesActivity : SimpleActivity() {
         Intent(this, BlockedThreadActivity::class.java).apply {
             val conversation = any as Conversation
             putExtra(BLOCKED_ADDRESS, conversation.phoneNumber)
-            putExtra(BLOCKED_TITLE, conversation.title)
             startActivity(this)
         }
     }

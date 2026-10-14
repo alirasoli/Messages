@@ -33,7 +33,7 @@ import org.fossify.messages.models.RecycleBinMessage
         Draft::class,
         BlockedMessage::class
     ],
-    version = 12
+    version = 13
 )
 @TypeConverters(Converters::class)
 abstract class MessagesDatabase : RoomDatabase() {
@@ -74,6 +74,7 @@ abstract class MessagesDatabase : RoomDatabase() {
                             .addMigrations(MIGRATION_9_10)
                             .addMigrations(MIGRATION_10_11)
                             .addMigrations(MIGRATION_11_12)
+                            .addMigrations(MIGRATION_12_13)
                             .build()
                     }
                 }
@@ -187,6 +188,12 @@ abstract class MessagesDatabase : RoomDatabase() {
                     execSQL("CREATE TABLE IF NOT EXISTS `blocked_messages` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `address` TEXT NOT NULL, `body` TEXT NOT NULL, `date` INTEGER NOT NULL, `subscription_id` INTEGER NOT NULL, `reason` INTEGER NOT NULL, `matched_keyword` TEXT)")
                     execSQL("CREATE INDEX IF NOT EXISTS `index_blocked_messages_address` ON `blocked_messages` (`address`)")
                 }
+            }
+        }
+
+        private val MIGRATION_12_13 = object : Migration(12, 13) {
+            override fun migrate(db: SupportSQLiteDatabase) {
+                db.execSQL("ALTER TABLE blocked_messages ADD COLUMN seen INTEGER NOT NULL DEFAULT 0")
             }
         }
     }

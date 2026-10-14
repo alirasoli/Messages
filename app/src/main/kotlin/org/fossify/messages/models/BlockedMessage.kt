@@ -17,4 +17,5 @@ data class BlockedMessage(
     @ColumnInfo(name = "subscription_id") val subscriptionId: Int,
     @ColumnInfo(name = "reason") val reason: Int,
     @ColumnInfo(name = "matched_keyword") val matchedKeyword: String? = null,
+    @ColumnInfo(name = "seen") val seen: Boolean = false,
 )

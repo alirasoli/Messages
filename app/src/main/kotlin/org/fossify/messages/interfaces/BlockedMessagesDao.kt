@@ -19,6 +19,9 @@ interface BlockedMessagesDao {
     @Query("SELECT * FROM blocked_messages WHERE address IN (:addresses)")
     fun getForAddresses(addresses: List<String>): List<BlockedMessage>
 
+    @Query("UPDATE blocked_messages SET seen = 1 WHERE address = :address")
+    fun markSeen(address: String)
+
     @Query("DELETE FROM blocked_messages WHERE id IN (:ids)")
     fun deleteByIds(ids: List<Long>)
 

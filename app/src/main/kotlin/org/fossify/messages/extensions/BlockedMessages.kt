@@ -55,6 +55,7 @@ fun Context.getBlockedConversations(): ArrayList<Conversation> {
     val helper = SimpleContactsHelper(this)
     val conversations = blockedMessagesDB.getAll().groupBy { it.address }.map { (address, messages) ->
         val latest = messages.first()
+        val unseen = messages.count { !it.seen }
         val name = getMyContactsCursor(favoritesOnly = false, withPhoneNumbersOnly = true).use {
             getNameFromAddress(address, it)
         }
@@ -63,12 +64,12 @@ fun Context.getBlockedConversations(): ArrayList<Conversation> {
             threadId = address.hashCode().toLong(),
             snippet = latest.body,
             date = (latest.date / 1000).toInt(),
-            read = false,
-            title = name,
+            read = unseen == 0,
+            title = if (messages.size > 1) "$name (${messages.size})" else name,
             photoUri = helper.getPhotoUriFromPhoneNumber(address),
             isGroupConversation = false,
             phoneNumber = address,
-            unreadCount = messages.size
+            unreadCount = unseen
         )
     }
 
