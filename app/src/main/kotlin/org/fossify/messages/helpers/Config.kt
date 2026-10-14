@@ -91,6 +91,15 @@ class Config(context: Context) : BaseConfig(context) {
         blockedKeywords = blockedKeywords.minus(keyword)
     }
 
+    var keepBlockedMessages: Boolean
+        get() = prefs.getBoolean(KEEP_BLOCKED_MESSAGES, true)
+        set(keepBlockedMessages) = prefs.edit().putBoolean(KEEP_BLOCKED_MESSAGES, keepBlockedMessages).apply()
+
+    var blockedMessagesRetentionDays: Int
+        get() = prefs.getInt(BLOCKED_MESSAGES_RETENTION_DAYS, 0)
+        set(blockedMessagesRetentionDays) = prefs.edit()
+            .putInt(BLOCKED_MESSAGES_RETENTION_DAYS, blockedMessagesRetentionDays).apply()
+
     var exportSms: Boolean
         get() = prefs.getBoolean(EXPORT_SMS, true)
         set(exportSms) = prefs.edit().putBoolean(EXPORT_SMS, exportSms).apply()
