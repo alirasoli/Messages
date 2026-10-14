@@ -103,6 +103,7 @@ class SettingsActivity : SimpleActivity() {
         setupLanguage()
         setupManageBlockedNumbers()
         setupManageBlockedKeywords()
+        setupBlockedMessages()
         setupChangeDateTimeFormat()
         setupFontSize()
         setupShowCharacterCounter()
@@ -218,6 +219,41 @@ class SettingsActivity : SimpleActivity() {
             }
         }
     }
+
+    @Suppress("MagicNumber")
+    private fun setupBlockedMessages() = binding.apply {
+        settingsKeepBlockedMessages.isChecked = config.keepBlockedMessages
+        settingsKeepBlockedMessagesHolder.setOnClickListener {
+            settingsKeepBlockedMessages.toggle()
+            config.keepBlockedMessages = settingsKeepBlockedMessages.isChecked
+        }
+
+        settingsBlockedMessagesRetention.text = getBlockedMessagesRetentionText()
+        settingsBlockedMessagesRetentionHolder.setOnClickListener {
+            val items = arrayListOf(
+                RadioItem(0, getString(R.string.blocked_retention_never), 0),
+                RadioItem(1, getString(R.string.blocked_retention_7_days), 7),
+                RadioItem(2, getString(R.string.blocked_retention_30_days), 30),
+                RadioItem(3, getString(R.string.blocked_retention_90_days), 90),
+            )
+
+            val checkedItemId = items.find { it.value == config.blockedMessagesRetentionDays }?.id ?: 0
+            RadioGroupDialog(this@SettingsActivity, items, checkedItemId) {
+                config.blockedMessagesRetentionDays = it as Int
+                settingsBlockedMessagesRetention.text = getBlockedMessagesRetentionText()
+            }
+        }
+    }
+
+    @Suppress("MagicNumber")
+    private fun getBlockedMessagesRetentionText() = getString(
+        when (config.blockedMessagesRetentionDays) {
+            7 -> R.string.blocked_retention_7_days
+            30 -> R.string.blocked_retention_30_days
+            90 -> R.string.blocked_retention_90_days
+            else -> R.string.blocked_retention_never
+        }
+    )
 
     private fun setupChangeDateTimeFormat() = binding.apply {
         settingsChangeDateTimeFormatHolder.setOnClickListener {
