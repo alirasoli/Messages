@@ -18,11 +18,15 @@ import org.fossify.messages.extensions.getNotificationBitmap
 import org.fossify.messages.extensions.getThreadId
 import org.fossify.messages.extensions.insertNewSMS
 import org.fossify.messages.extensions.insertOrUpdateConversation
+import org.fossify.messages.extensions.keepBlockedMessage
 import org.fossify.messages.extensions.messagesDB
 import org.fossify.messages.extensions.shouldUnarchive
 import org.fossify.messages.extensions.showReceivedMessageNotification
 import org.fossify.messages.extensions.updateConversationArchivedStatus
-import org.fossify.messages.helpers.ReceiverUtils.isMessageFilteredOut
+import org.fossify.messages.helpers.BLOCK_REASON_KEYWORD
+import org.fossify.messages.helpers.BLOCK_REASON_NUMBER
+import org.fossify.messages.helpers.BLOCK_REASON_UNKNOWN
+import org.fossify.messages.helpers.ReceiverUtils.findBlockedKeyword
 import org.fossify.messages.helpers.refreshConversations
 import org.fossify.messages.helpers.refreshMessages
 import org.fossify.messages.models.Message
@@ -45,18 +49,33 @@ class SmsReceiver : BroadcastReceiver() {
                 val status = parts.last().status
                 val body = buildString { parts.forEach { append(it.messageBody.orEmpty()) } }
 
-                if (isMessageFilteredOut(appContext, body)) return@ensureBackgroundThread
-                if (appContext.isNumberBlocked(address)) return@ensureBackgroundThread
+                val date = System.currentTimeMillis()
+                val subscriptionId = intent.getIntExtra("subscription", -1)
+
+                val blockedKeyword = findBlockedKeyword(appContext, body)
+                if (blockedKeyword != null) {
+                    appContext.keepBlockedMessage(
+                        address, body, date, subscriptionId, BLOCK_REASON_KEYWORD, blockedKeyword
+                    )
+                    return@ensureBackgroundThread
+                }
+
+                if (appContext.isNumberBlocked(address)) {
+                    appContext.keepBlockedMessage(address, body, date, subscriptionId, BLOCK_REASON_NUMBER)
+                    return@ensureBackgroundThread
+                }
+
                 if (appContext.baseConfig.blockUnknownNumbers) {
                     val privateCursor =
                         appContext.getMyContactsCursor(favoritesOnly = false, withPhoneNumbersOnly = true)
                     val result = SimpleContactsHelper(appContext).existsSync(address, privateCursor)
-                    if (result == ContactLookupResult.NotFound) return@ensureBackgroundThread
+                    if (result == ContactLookupResult.NotFound) {
+                        appContext.keepBlockedMessage(address, body, date, subscriptionId, BLOCK_REASON_UNKNOWN)
+                        return@ensureBackgroundThread
+                    }
                 }
 
-                val date = System.currentTimeMillis()
                 val threadId = appContext.getThreadId(address)
-                val subscriptionId = intent.getIntExtra("subscription", -1)
 
                 handleMessageSync(
                     context = appContext,
