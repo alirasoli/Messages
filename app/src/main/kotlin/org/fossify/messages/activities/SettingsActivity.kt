@@ -23,6 +23,7 @@ import org.fossify.commons.helpers.FONT_SIZE_LARGE
 import org.fossify.commons.helpers.FONT_SIZE_MEDIUM
 import org.fossify.commons.helpers.FONT_SIZE_SMALL
 import org.fossify.commons.helpers.NavigationIcon
+import org.fossify.commons.helpers.PERMISSION_READ_CONTACTS
 import org.fossify.commons.helpers.PROTECTION_FINGERPRINT
 import org.fossify.commons.helpers.SHOW_ALL_TABS
 import org.fossify.commons.helpers.ensureBackgroundThread
@@ -103,6 +104,7 @@ class SettingsActivity : SimpleActivity() {
         setupLanguage()
         setupManageBlockedNumbers()
         setupManageBlockedKeywords()
+        setupKeywordExceptions()
         setupBlockedMessages()
         setupChangeDateTimeFormat()
         setupFontSize()
@@ -217,6 +219,39 @@ class SettingsActivity : SimpleActivity() {
             Intent(this@SettingsActivity, ManageBlockedKeywordsActivity::class.java).apply {
                 startActivity(this)
             }
+        }
+    }
+
+    private fun setupKeywordExceptions() = binding.apply {
+        settingsManageKeywordExceptionsHolder.setOnClickListener {
+            startActivity(Intent(this@SettingsActivity, ManageKeywordExceptionsActivity::class.java))
+        }
+
+        settingsAllowKeywordsFromContacts.isChecked = config.allowKeywordsFromContacts
+        settingsAllowKeywordsFromContactsHolder.setOnClickListener {
+            val enable = !settingsAllowKeywordsFromContacts.isChecked
+            if (!enable) {
+                settingsAllowKeywordsFromContacts.isChecked = false
+                config.allowKeywordsFromContacts = false
+                return@setOnClickListener
+            }
+
+            // without the contacts permission no sender can be resolved, so the option would never apply
+            handlePermission(PERMISSION_READ_CONTACTS) { granted ->
+                if (granted) {
+                    settingsAllowKeywordsFromContacts.isChecked = true
+                    config.allowKeywordsFromContacts = true
+                } else {
+                    settingsAllowKeywordsFromContacts.isChecked = false
+                    toast(R.string.allow_keywords_contacts_permission_needed)
+                }
+            }
+        }
+
+        settingsAllowKeywordsForCodes.isChecked = config.allowKeywordsForCodes
+        settingsAllowKeywordsForCodesHolder.setOnClickListener {
+            settingsAllowKeywordsForCodes.toggle()
+            config.allowKeywordsForCodes = settingsAllowKeywordsForCodes.isChecked
         }
     }
 

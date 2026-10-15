@@ -52,7 +52,7 @@ class SmsReceiver : BroadcastReceiver() {
                 val date = System.currentTimeMillis()
                 val subscriptionId = intent.getIntExtra("subscription", -1)
 
-                val blockedKeyword = findBlockedKeyword(appContext, body)
+                val blockedKeyword = findBlockedKeyword(appContext, body, address)
                 if (blockedKeyword != null) {
                     appContext.keepBlockedMessage(
                         address, body, date, subscriptionId, BLOCK_REASON_KEYWORD, blockedKeyword
