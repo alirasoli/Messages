@@ -44,7 +44,7 @@ jobs:
 
       - name: Prepare APK
         run: |
-          APK=$(ls artifact/release/*release*.apk 2>/dev/null | head -n1)
+          APK=$(find artifact -name "*release*.apk" | head -n1)
           [ -n "$APK" ] || { echo "No release APK in the artifact:" >&2; find artifact -type f >&2; exit 1; }
           cp "$APK" "messages-${VERSION_CODE}-foss-release.apk"
 
@@ -54,7 +54,7 @@ jobs:
             $0 ~ "^## \\[" v "\\]" { found=1; next }
             found && /^## \[/ { exit }
             found { print }
-          ' CHANGELOG.md | sed -e '/./,$!d' | sed 's/^### /### /' > notes.md
+          ' CHANGELOG.md | sed -e '/./,$!d' > notes.md
           [ -s notes.md ] || { echo "No CHANGELOG section for $VERSION_NAME" >&2; exit 1; }
           cat notes.md
 
