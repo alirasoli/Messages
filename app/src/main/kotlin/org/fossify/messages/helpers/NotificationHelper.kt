@@ -21,8 +21,10 @@ import org.fossify.commons.helpers.ensureBackgroundThread
 import org.fossify.messages.R
 import org.fossify.messages.activities.ThreadActivity
 import org.fossify.messages.extensions.config
+import org.fossify.messages.extensions.extractVerificationCode
 import org.fossify.messages.extensions.shortcutHelper
 import org.fossify.messages.messaging.isShortCodeWithLetters
+import org.fossify.messages.receivers.CopyCodeReceiver
 import org.fossify.messages.receivers.DeleteSmsReceiver
 import org.fossify.messages.receivers.DirectReplyReceiver
 import org.fossify.messages.receivers.MarkAsReadReceiver
@@ -171,6 +173,8 @@ class NotificationHelper(private val context: Context) {
             ).setChannelId(notificationChannelId)
         }
 
+        addCopyCodeAction(builder, body, notificationId, notificationChannelId)
+
         var shortcut = context.shortcutHelper.getShortcut(threadId)
         if (shortcut == null) {
             ensureBackgroundThread {
@@ -186,6 +190,34 @@ class NotificationHelper(private val context: Context) {
                 context.shortcutHelper.reportReceiveMessageUsage(threadId)
             }
         }
+    }
+
+    private fun addCopyCodeAction(
+        builder: NotificationCompat.Builder,
+        body: String,
+        notificationId: Int,
+        notificationChannelId: String,
+    ) {
+        if (context.config.lockScreenVisibilitySetting == LOCK_SCREEN_NOTHING) {
+            return
+        }
+
+        val code = body.extractVerificationCode() ?: return
+        val copyCodeIntent = Intent(context, CopyCodeReceiver::class.java).apply {
+            action = COPY_CODE
+            putExtra(CODE, code)
+        }
+        val copyCodePendingIntent = PendingIntent.getBroadcast(
+            context,
+            notificationId + 1,
+            copyCodeIntent,
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+        )
+        builder.addAction(
+            org.fossify.commons.R.drawable.ic_copy_vector,
+            context.getString(R.string.copy_code),
+            copyCodePendingIntent
+        ).setChannelId(notificationChannelId)
     }
 
     @SuppressLint("NewApi")

@@ -26,6 +26,7 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.RequestOptions
 import com.google.android.mms.pdu_alt.PduHeaders
 import org.fossify.commons.extensions.areDigitsOnly
+import org.fossify.commons.extensions.copyToClipboard
 import org.fossify.commons.extensions.getBlockedNumbers
 import org.fossify.commons.extensions.getIntValue
 import org.fossify.commons.extensions.getIntValueOr
@@ -1068,6 +1069,10 @@ fun Context.showReceivedMessageNotification(
     threadId: Long,
     bitmap: Bitmap?,
 ) {
+    if (config.autoCopyCode) {
+        body.extractVerificationCode()?.let { copyToClipboard(it) }
+    }
+
     Handler(Looper.getMainLooper()).post {
         notificationHelper.showMessageNotification(
             messageId = messageId,

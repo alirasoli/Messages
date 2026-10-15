@@ -113,6 +113,7 @@ class SettingsActivity : SimpleActivity() {
         setupGroupMessageAsMMS()
         setupKeepConversationsArchived()
         setupLockScreenVisibility()
+        setupAutoCopyCode()
         setupMMSFileSizeLimit()
         setupUseRecycleBin()
         setupEmptyRecycleBin()
@@ -300,6 +301,14 @@ class SettingsActivity : SimpleActivity() {
         settingsKeepConversationsArchivedHolder.setOnClickListener {
             settingsKeepConversationsArchived.toggle()
             config.keepConversationsArchived = settingsKeepConversationsArchived.isChecked
+        }
+    }
+
+    private fun setupAutoCopyCode() = binding.apply {
+        settingsAutoCopyCode.isChecked = config.autoCopyCode
+        settingsAutoCopyCodeHolder.setOnClickListener {
+            settingsAutoCopyCode.toggle()
+            config.autoCopyCode = settingsAutoCopyCode.isChecked
         }
     }
 
