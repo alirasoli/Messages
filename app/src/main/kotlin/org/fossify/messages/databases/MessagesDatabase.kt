@@ -10,11 +10,13 @@ import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
 import org.fossify.messages.helpers.Converters
 import org.fossify.messages.interfaces.AttachmentsDao
+import org.fossify.messages.interfaces.BlockedMessagesDao
 import org.fossify.messages.interfaces.ConversationsDao
 import org.fossify.messages.interfaces.DraftsDao
 import org.fossify.messages.interfaces.MessageAttachmentsDao
 import org.fossify.messages.interfaces.MessagesDao
 import org.fossify.messages.models.Attachment
+import org.fossify.messages.models.BlockedMessage
 import org.fossify.messages.models.Conversation
 import org.fossify.messages.models.Draft
 import org.fossify.messages.models.Message
@@ -28,9 +30,10 @@ import org.fossify.messages.models.RecycleBinMessage
         MessageAttachment::class,
         Message::class,
         RecycleBinMessage::class,
-        Draft::class
+        Draft::class,
+        BlockedMessage::class
     ],
-    version = 11
+    version = 13
 )
 @TypeConverters(Converters::class)
 abstract class MessagesDatabase : RoomDatabase() {
@@ -44,6 +47,8 @@ abstract class MessagesDatabase : RoomDatabase() {
     abstract fun MessagesDao(): MessagesDao
 
     abstract fun DraftsDao(): DraftsDao
+
+    abstract fun BlockedMessagesDao(): BlockedMessagesDao
 
     companion object {
         private var db: MessagesDatabase? = null
@@ -68,6 +73,8 @@ abstract class MessagesDatabase : RoomDatabase() {
                             .addMigrations(MIGRATION_8_9)
                             .addMigrations(MIGRATION_9_10)
                             .addMigrations(MIGRATION_10_11)
+                            .addMigrations(MIGRATION_11_12)
+                            .addMigrations(MIGRATION_12_13)
                             .build()
                     }
                 }
@@ -172,6 +179,21 @@ abstract class MessagesDatabase : RoomDatabase() {
                     "CREATE INDEX IF NOT EXISTS `index_messages_thread_id_date` " +
                         "ON `messages` (`thread_id`, `date`)"
                 )
+            }
+        }
+
+        private val MIGRATION_11_12 = object : Migration(11, 12) {
+            override fun migrate(db: SupportSQLiteDatabase) {
+                db.apply {
+                    execSQL("CREATE TABLE IF NOT EXISTS `blocked_messages` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `address` TEXT NOT NULL, `body` TEXT NOT NULL, `date` INTEGER NOT NULL, `subscription_id` INTEGER NOT NULL, `reason` INTEGER NOT NULL, `matched_keyword` TEXT)")
+                    execSQL("CREATE INDEX IF NOT EXISTS `index_blocked_messages_address` ON `blocked_messages` (`address`)")
+                }
+            }
+        }
+
+        private val MIGRATION_12_13 = object : Migration(12, 13) {
+            override fun migrate(db: SupportSQLiteDatabase) {
+                db.execSQL("ALTER TABLE blocked_messages ADD COLUMN seen INTEGER NOT NULL DEFAULT 0")
             }
         }
     }
