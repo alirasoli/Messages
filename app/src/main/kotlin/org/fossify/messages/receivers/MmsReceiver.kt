@@ -45,7 +45,7 @@ class MmsReceiver : MmsReceivedReceiver() {
     }
 
     override fun isContentBlocked(context: Context, content: String): Boolean {
-        val keyword = findBlockedKeyword(context, content)
+        val keyword = findBlockedKeyword(context, content, blockedAddress)
         val reason = if (keyword != null) BLOCK_REASON_KEYWORD else blockedReason
         if (reason == null) return false
 

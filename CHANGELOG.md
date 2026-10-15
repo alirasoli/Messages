@@ -5,6 +5,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+### Added
+- Added keyword block exceptions: allow blocked keywords from contacts, for messages containing a 4 to 8 digit code, and for messages containing an exception keyword
 
 ## [1.10.1] - 2026-10-10
 ### Changed

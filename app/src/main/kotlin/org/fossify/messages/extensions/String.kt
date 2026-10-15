@@ -47,3 +47,12 @@ fun String.isZipMimeType(): Boolean {
 fun String.isPlainTextMimeType(): Boolean {
     return lowercase() == "text/plain"
 }
+
+private val VERIFICATION_CODE_REGEX = Regex("(?<!\\d)\\d{4,8}(?!\\d)")
+
+/**
+ * Returns the first standalone run of 4 to 8 digits (e.g. an OTP), or null if there is none.
+ */
+fun String.extractVerificationCode(): String? {
+    return VERIFICATION_CODE_REGEX.find(this)?.value
+}
