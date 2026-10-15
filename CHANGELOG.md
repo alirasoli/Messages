@@ -5,6 +5,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+
+## [1.11.1] - 2026-10-15
 ### Fixed
 - Fixed an error when changing the app icon color
 
@@ -314,7 +316,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 [#829]: https://github.com/FossifyOrg/Messages/issues/829
 [#834]: https://github.com/FossifyOrg/Messages/issues/834
 
-[Unreleased]: https://github.com/alirasoli/Messages/compare/1.11.0...HEAD
+[Unreleased]: https://github.com/alirasoli/Messages/compare/1.11.1...HEAD
+[1.11.1]: https://github.com/alirasoli/Messages/compare/1.11.0...1.11.1
 [1.11.0]: https://github.com/alirasoli/Messages/releases/tag/1.11.0
 [1.10.1]: https://github.com/FossifyOrg/Messages/compare/1.10.0...1.10.1
 [1.10.0]: https://github.com/FossifyOrg/Messages/compare/1.9.1...1.10.0
