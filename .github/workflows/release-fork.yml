@@ -1,0 +1,67 @@
+name: Release fork
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  actions: read
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    env:
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Read version
+        run: |
+          echo "VERSION_NAME=$(grep '^VERSION_NAME=' gradle.properties | cut -d= -f2)" >> "$GITHUB_ENV"
+          echo "VERSION_CODE=$(grep '^VERSION_CODE=' gradle.properties | cut -d= -f2)" >> "$GITHUB_ENV"
+
+      - name: Fail if the release already exists
+        run: |
+          if gh release view "$VERSION_NAME" >/dev/null 2>&1; then
+            echo "Release $VERSION_NAME already exists" >&2
+            exit 1
+          fi
+
+      - name: Wait for the build of this commit
+        run: |
+          for i in $(seq 1 30); do
+            RUN_ID=$(gh run list --workflow build-fork.yml --commit "$GITHUB_SHA" --json databaseId,status,conclusion \
+              --jq '[.[] | select(.conclusion != "cancelled")] | first | .databaseId // empty')
+            [ -n "$RUN_ID" ] && break
+            sleep 20
+          done
+          [ -n "$RUN_ID" ] || { echo "No Build fork APK run found for $GITHUB_SHA" >&2; exit 1; }
+          gh run watch "$RUN_ID" --exit-status
+          echo "RUN_ID=$RUN_ID" >> "$GITHUB_ENV"
+
+      - name: Download build artifact
+        run: gh run download "$RUN_ID" --name messages-blocked-apk --dir artifact
+
+      - name: Prepare APK
+        run: |
+          APK=$(ls artifact/release/*release*.apk 2>/dev/null | head -n1)
+          [ -n "$APK" ] || { echo "No release APK in the artifact:" >&2; find artifact -type f >&2; exit 1; }
+          cp "$APK" "messages-${VERSION_CODE}-foss-release.apk"
+
+      - name: Extract release notes
+        run: |
+          awk -v v="$VERSION_NAME" '
+            $0 ~ "^## \\[" v "\\]" { found=1; next }
+            found && /^## \[/ { exit }
+            found { print }
+          ' CHANGELOG.md | sed -e '/./,$!d' | sed 's/^### /### /' > notes.md
+          [ -s notes.md ] || { echo "No CHANGELOG section for $VERSION_NAME" >&2; exit 1; }
+          cat notes.md
+
+      - name: Create release
+        run: |
+          gh release create "$VERSION_NAME" \
+            --target "$GITHUB_SHA" \
+            --title "$VERSION_NAME" \
+            --notes-file notes.md \
+            "messages-${VERSION_CODE}-foss-release.apk"
