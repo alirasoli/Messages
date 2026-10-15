@@ -102,6 +102,8 @@
     <string name="allow_keywords_for_codes">Don\'t block messages containing a code (4 to 8 digits)</string>
     <string name="allow_keywords_contacts_permission_needed">Contacts permission is required for this option</string>
     <string name="lock_screen_visibility">Lock screen notification visibility</string>
+    <string name="copy_code">Copy code</string>
+    <string name="auto_copy_code">Automatically copy verification codes</string>
     <string name="sender_and_message">Sender and message</string>
     <string name="sender_only">Sender only</string>
     <string name="enable_delivery_reports">Enable delivery reports</string>

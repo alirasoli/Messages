@@ -122,6 +122,10 @@ class Config(context: Context) : BaseConfig(context) {
         set(blockedMessagesRetentionDays) = prefs.edit()
             .putInt(BLOCKED_MESSAGES_RETENTION_DAYS, blockedMessagesRetentionDays).apply()
 
+    var autoCopyCode: Boolean
+        get() = prefs.getBoolean(AUTO_COPY_CODE, true)
+        set(autoCopyCode) = prefs.edit().putBoolean(AUTO_COPY_CODE, autoCopyCode).apply()
+
     var exportSms: Boolean
         get() = prefs.getBoolean(EXPORT_SMS, true)
         set(exportSms) = prefs.edit().putBoolean(EXPORT_SMS, exportSms).apply()
