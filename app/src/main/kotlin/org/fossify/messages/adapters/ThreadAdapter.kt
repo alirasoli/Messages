@@ -11,6 +11,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.RelativeLayout
+import android.widget.TextView
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.constraintlayout.widget.ConstraintSet
 import androidx.core.graphics.drawable.toDrawable
@@ -366,20 +367,38 @@ class ThreadAdapter(
         }
     }
 
+    private fun startPartialTextSelection(textView: TextView, longClickListener: View.OnLongClickListener) {
+        textView.setTextIsSelectable(true)
+        textView.requestFocus()
+        // let the TextView handle the long press itself, which selects the tapped word and shows
+        // the system selection handles and copy toolbar, then restore the multi select long press
+        textView.setOnLongClickListener(null)
+        textView.performLongClick()
+        textView.setOnLongClickListener(longClickListener)
+    }
+
     private fun setupView(holder: ViewHolder, view: View, message: Message) {
         ItemMessageBinding.bind(view).apply {
             threadMessageHolder.isSelected = selectedKeys.contains(message.getSelectionKey())
             threadMessageBody.apply {
+                // views are recycled, so always reset the partial selection state
+                setTextIsSelectable(false)
                 text = message.body
                 setTextSize(TypedValue.COMPLEX_UNIT_PX, fontSize)
                 beVisibleIf(message.body.isNotEmpty())
-                setOnLongClickListener {
+                val longClickListener = View.OnLongClickListener {
                     holder.viewLongClicked()
                     true
                 }
+                setOnLongClickListener(longClickListener)
 
                 setOnClickListener {
-                    holder.viewClicked(message)
+                    // tapping the text of the only selected message starts a partial text selection
+                    if (isOneItemSelected() && selectedKeys.contains(message.getSelectionKey())) {
+                        startPartialTextSelection(this, longClickListener)
+                    } else {
+                        holder.viewClicked(message)
+                    }
                 }
             }
 
