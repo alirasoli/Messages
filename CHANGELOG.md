@@ -6,7 +6,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 ### Added
-- Added partial text selection: tap the text of a selected message to select and copy just a part of it
+- Added partial text selection: long press the text of a selected message to select and copy just a part of it
 
 ## [1.10.1] - 2026-10-10
 ### Changed
