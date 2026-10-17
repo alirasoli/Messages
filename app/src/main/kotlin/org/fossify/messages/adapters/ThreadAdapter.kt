@@ -371,7 +371,7 @@ class ThreadAdapter(
         textView.setTextIsSelectable(true)
         textView.requestFocus()
         // let the TextView handle the long press itself, which selects the tapped word and shows
-        // the system selection handles and copy toolbar, then restore the multi select long press
+        // the system selection handles and copy toolbar, then restore the long press handling
         textView.setOnLongClickListener(null)
         textView.performLongClick()
         textView.setOnLongClickListener(longClickListener)
@@ -386,19 +386,20 @@ class ThreadAdapter(
                 text = message.body
                 setTextSize(TypedValue.COMPLEX_UNIT_PX, fontSize)
                 beVisibleIf(message.body.isNotEmpty())
-                val longClickListener = View.OnLongClickListener {
-                    holder.viewLongClicked()
+                lateinit var longClickListener: View.OnLongClickListener
+                longClickListener = View.OnLongClickListener {
+                    // long pressing the text of the only selected message starts a partial text selection
+                    if (isOneItemSelected() && selectedKeys.contains(message.getSelectionKey())) {
+                        startPartialTextSelection(this, longClickListener)
+                    } else {
+                        holder.viewLongClicked()
+                    }
                     true
                 }
                 setOnLongClickListener(longClickListener)
 
                 setOnClickListener {
-                    // tapping the text of the only selected message starts a partial text selection
-                    if (isOneItemSelected() && selectedKeys.contains(message.getSelectionKey())) {
-                        startPartialTextSelection(this, longClickListener)
-                    } else {
-                        holder.viewClicked(message)
-                    }
+                    holder.viewClicked(message)
                 }
             }
 
