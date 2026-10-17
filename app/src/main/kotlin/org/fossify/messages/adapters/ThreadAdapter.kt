@@ -6,7 +6,9 @@ import android.graphics.Color
 import android.graphics.Typeface
 import android.graphics.drawable.Drawable
 import android.util.TypedValue
+import android.graphics.Rect
 import android.view.Menu
+import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
@@ -17,6 +19,7 @@ import androidx.constraintlayout.widget.ConstraintSet
 import androidx.core.graphics.drawable.toDrawable
 import androidx.core.view.updateLayoutParams
 import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.SimpleItemAnimator
 import androidx.viewbinding.ViewBinding
 import com.bumptech.glide.Glide
@@ -101,6 +104,7 @@ class ThreadAdapter(
     val deleteMessages: (messages: List<Message>, toRecycleBin: Boolean, fromRecycleBin: Boolean) -> Unit
 ) : MyRecyclerViewListAdapter<ThreadItem>(activity, recyclerView, ThreadItemDiffCallback(), itemClick) {
     private var fontSize = activity.getTextSize()
+    private var partialSelectionView: TextView? = null
 
     @SuppressLint("MissingPermission")
     private val hasMultipleSIMCards = (activity.subscriptionManagerCompat().activeSubscriptionInfoList?.size ?: 0) > 1
@@ -116,6 +120,21 @@ class ThreadAdapter(
         setupDragListener(true)
         setHasStableIds(true)
         (recyclerView.itemAnimator as? SimpleItemAnimator)?.supportsChangeAnimations = false
+        recyclerView.addOnItemTouchListener(object : RecyclerView.SimpleOnItemTouchListener() {
+            override fun onInterceptTouchEvent(rv: RecyclerView, e: MotionEvent): Boolean {
+                // touching anywhere outside the partially selected text cancels the text selection
+                val selectedView = partialSelectionView
+                if (e.actionMasked == MotionEvent.ACTION_DOWN && selectedView != null) {
+                    val bounds = Rect()
+                    val isInside = selectedView.getGlobalVisibleRect(bounds) &&
+                        bounds.contains(e.rawX.toInt(), e.rawY.toInt())
+                    if (!isInside) {
+                        clearPartialTextSelection()
+                    }
+                }
+                return false
+            }
+        })
     }
 
     override fun getActionMenuId() = R.menu.cab_thread
@@ -171,7 +190,9 @@ class ThreadAdapter(
 
     override fun onActionModeCreated() {}
 
-    override fun onActionModeDestroyed() {}
+    override fun onActionModeDestroyed() {
+        clearPartialTextSelection()
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val binding = when (viewType) {
@@ -367,7 +388,22 @@ class ThreadAdapter(
         }
     }
 
+    private fun clearPartialTextSelection() {
+        partialSelectionView?.apply {
+            // losing focus ends the selection mode and hides the handles and the toolbar
+            clearFocus()
+            setTextIsSelectable(false)
+            isClickable = true
+            isLongClickable = true
+        }
+        partialSelectionView = null
+    }
+
     private fun startPartialTextSelection(textView: TextView, longClickListener: View.OnLongClickListener) {
+        if (partialSelectionView !== textView) {
+            clearPartialTextSelection()
+        }
+        partialSelectionView = textView
         textView.setTextIsSelectable(true)
         textView.requestFocus()
         // let the TextView handle the long press itself, which selects the tapped word and shows
@@ -399,6 +435,7 @@ class ThreadAdapter(
                 setOnLongClickListener(longClickListener)
 
                 setOnClickListener {
+                    clearPartialTextSelection()
                     holder.viewClicked(message)
                 }
             }
