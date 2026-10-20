@@ -33,7 +33,10 @@ import org.fossify.commons.models.RadioItem
 import org.fossify.messages.R
 import org.fossify.messages.databinding.ActivitySettingsBinding
 import org.fossify.messages.dialogs.ExportMessagesDialog
+import org.fossify.messages.extensions.KeywordCleanupMatch
+import org.fossify.messages.extensions.applyKeywordCleanup
 import org.fossify.messages.extensions.config
+import org.fossify.messages.extensions.findKeywordCleanupMatches
 import org.fossify.messages.extensions.emptyMessagesRecycleBin
 import org.fossify.messages.extensions.messagesDB
 import org.fossify.messages.helpers.FILE_SIZE_100_KB
@@ -105,6 +108,7 @@ class SettingsActivity : SimpleActivity() {
         setupManageBlockedNumbers()
         setupManageBlockedKeywords()
         setupKeywordExceptions()
+        setupCleanupKeywordMessages()
         setupBlockedMessages()
         setupChangeDateTimeFormat()
         setupFontSize()
@@ -219,6 +223,42 @@ class SettingsActivity : SimpleActivity() {
         settingsManageBlockedKeywordsHolder.setOnClickListener {
             Intent(this@SettingsActivity, ManageBlockedKeywordsActivity::class.java).apply {
                 startActivity(this)
+            }
+        }
+    }
+
+    private fun setupCleanupKeywordMessages() = binding.apply {
+        settingsCleanupKeywordMessagesHolder.setOnClickListener {
+            toast(R.string.cleanup_scanning)
+            ensureBackgroundThread {
+                val matches = findKeywordCleanupMatches()
+                runOnUiThread {
+                    if (matches.isEmpty()) {
+                        toast(R.string.cleanup_none)
+                    } else {
+                        confirmKeywordCleanup(matches)
+                    }
+                }
+            }
+        }
+    }
+
+    private fun confirmKeywordCleanup(matches: List<KeywordCleanupMatch>) {
+        val messageId = if (config.keepBlockedMessages) {
+            R.string.cleanup_confirm_keep
+        } else {
+            R.string.cleanup_confirm_delete
+        }
+
+        ConfirmationDialog(
+            activity = this,
+            message = getString(messageId, matches.size),
+            positive = org.fossify.commons.R.string.yes,
+            negative = org.fossify.commons.R.string.no
+        ) {
+            ensureBackgroundThread {
+                val cleaned = applyKeywordCleanup(matches)
+                runOnUiThread { toast(getString(R.string.cleanup_done, cleaned)) }
             }
         }
     }

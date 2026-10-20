@@ -94,6 +94,12 @@
     <string name="manage_blocked_keywords">Manage blocked keywords</string>
     <string name="not_blocking_keywords">You are not blocking any keywords. You may add keywords here to block all messages containing them.</string>
     <string name="add_a_blocked_keyword">Add a blocked keyword</string>
+    <string name="cleanup_keyword_messages">Clean up messages with blocked keywords</string>
+    <string name="cleanup_scanning">Scanning messages…</string>
+    <string name="cleanup_none">No messages contain your blocked keywords</string>
+    <string name="cleanup_confirm_keep">Move %d messages containing blocked keywords to Blocked messages? Messages from your contacts and messages with exception keywords are skipped.</string>
+    <string name="cleanup_confirm_delete">Permanently delete %d messages containing blocked keywords? \"Keep blocked messages\" is off, so they cannot be restored. Messages from your contacts and messages with exception keywords are skipped.</string>
+    <string name="cleanup_done">Cleaned up %d messages</string>
     <string name="keyword_exceptions">Keyword exceptions</string>
     <string name="manage_keyword_exceptions">Manage keyword exceptions</string>
     <string name="no_keyword_exceptions">You have no keyword exceptions. A message that matches a blocked keyword will not be blocked if it also contains one of these keywords.</string>
