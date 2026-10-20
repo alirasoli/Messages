@@ -2,6 +2,8 @@ package org.fossify.messages.extensions
 
 import android.annotation.SuppressLint
 import android.app.Application
+import android.content.ClipData
+import android.content.ClipboardManager
 import android.content.ContentResolver
 import android.content.ContentValues
 import android.content.Context
@@ -9,6 +11,7 @@ import android.database.Cursor
 import android.database.sqlite.SQLiteException
 import android.graphics.Bitmap
 import android.net.Uri
+import android.os.Build
 import android.os.Handler
 import android.os.Looper
 import android.provider.ContactsContract.PhoneLookup
@@ -1069,9 +1072,7 @@ fun Context.showReceivedMessageNotification(
     threadId: Long,
     bitmap: Bitmap?,
 ) {
-    if (config.autoCopyCode) {
-        body.extractVerificationCode()?.let { copyToClipboard(it) }
-    }
+    autoCopyVerificationCode(body)
 
     Handler(Looper.getMainLooper()).post {
         notificationHelper.showMessageNotification(
@@ -1083,6 +1084,28 @@ fun Context.showReceivedMessageNotification(
             bitmap = bitmap,
             sender = senderName
         )
+    }
+}
+
+/**
+ * Copies a verification code. Android 13+ shows its own clipboard confirmation, so the library
+ * toast (which would duplicate it) is only used on older versions.
+ */
+fun Context.copyVerificationCode(code: String) {
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+        val clip = ClipData.newPlainText(getString(R.string.copy_code), code)
+        (getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager).setPrimaryClip(clip)
+    } else {
+        copyToClipboard(code)
+    }
+}
+
+/**
+ * Copies the verification code of a message to the clipboard if the auto copy setting is on.
+ */
+fun Context.autoCopyVerificationCode(body: String) {
+    if (config.autoCopyCode) {
+        body.extractVerificationCode()?.let { copyVerificationCode(it) }
     }
 }
 

@@ -99,7 +99,6 @@
     <string name="no_keyword_exceptions">You have no keyword exceptions. A message that matches a blocked keyword will not be blocked if it also contains one of these keywords.</string>
     <string name="add_a_keyword_exception">Add a keyword exception</string>
     <string name="allow_keywords_from_contacts">Don\'t block keywords from my contacts</string>
-    <string name="allow_keywords_for_codes">Don\'t block messages containing a code (4 to 8 digits)</string>
     <string name="allow_keywords_contacts_permission_needed">Contacts permission is required for this option</string>
     <string name="lock_screen_visibility">Lock screen notification visibility</string>
     <string name="copy_code">Copy code</string>

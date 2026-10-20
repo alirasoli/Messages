@@ -248,12 +248,6 @@ class SettingsActivity : SimpleActivity() {
                 }
             }
         }
-
-        settingsAllowKeywordsForCodes.isChecked = config.allowKeywordsForCodes
-        settingsAllowKeywordsForCodesHolder.setOnClickListener {
-            settingsAllowKeywordsForCodes.toggle()
-            config.allowKeywordsForCodes = settingsAllowKeywordsForCodes.isChecked
-        }
     }
 
     @Suppress("MagicNumber")

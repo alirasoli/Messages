@@ -189,21 +189,6 @@
             </RelativeLayout>
 
             <RelativeLayout
-                android:id="@+id/settings_allow_keywords_for_codes_holder"
-                style="@style/SettingsHolderSwitchStyle"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <org.fossify.commons.views.MyMaterialSwitch
-                    android:id="@+id/settings_allow_keywords_for_codes"
-                    style="@style/SettingsSwitchStyle"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="@string/allow_keywords_for_codes" />
-
-            </RelativeLayout>
-
-            <RelativeLayout
                 android:id="@+id/settings_keep_blocked_messages_holder"
                 style="@style/SettingsHolderSwitchStyle"
                 android:layout_width="match_parent"
