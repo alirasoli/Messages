@@ -159,6 +159,89 @@
             </RelativeLayout>
 
             <RelativeLayout
+                android:id="@+id/settings_manage_keyword_exceptions_holder"
+                style="@style/SettingsHolderTextViewOneLinerStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <org.fossify.commons.views.MyTextView
+                    android:id="@+id/settings_manage_keyword_exceptions"
+                    style="@style/SettingsTextLabelStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/manage_keyword_exceptions" />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/settings_allow_keywords_from_contacts_holder"
+                style="@style/SettingsHolderSwitchStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <org.fossify.commons.views.MyMaterialSwitch
+                    android:id="@+id/settings_allow_keywords_from_contacts"
+                    style="@style/SettingsSwitchStyle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/allow_keywords_from_contacts" />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/settings_allow_keywords_for_codes_holder"
+                style="@style/SettingsHolderSwitchStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <org.fossify.commons.views.MyMaterialSwitch
+                    android:id="@+id/settings_allow_keywords_for_codes"
+                    style="@style/SettingsSwitchStyle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/allow_keywords_for_codes" />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/settings_keep_blocked_messages_holder"
+                style="@style/SettingsHolderSwitchStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <org.fossify.commons.views.MyMaterialSwitch
+                    android:id="@+id/settings_keep_blocked_messages"
+                    style="@style/SettingsSwitchStyle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/blocked_keep_messages" />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/settings_blocked_messages_retention_holder"
+                style="@style/SettingsHolderTextViewStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <org.fossify.commons.views.MyTextView
+                    android:id="@+id/settings_blocked_messages_retention_label"
+                    style="@style/SettingsTextLabelStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/blocked_retention" />
+
+                <org.fossify.commons.views.MyTextView
+                    android:id="@+id/settings_blocked_messages_retention"
+                    style="@style/SettingsTextValueStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/settings_blocked_messages_retention_label"
+                    tools:text="@string/blocked_retention_never" />
+
+            </RelativeLayout>
+
+            <RelativeLayout
                 android:id="@+id/settings_font_size_holder"
                 style="@style/SettingsHolderTextViewStyle"
                 android:layout_width="match_parent"

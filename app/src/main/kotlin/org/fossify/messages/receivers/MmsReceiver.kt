@@ -12,34 +12,58 @@ import org.fossify.commons.helpers.ContactLookupResult
 import org.fossify.commons.helpers.SimpleContactsHelper
 import org.fossify.commons.helpers.ensureBackgroundThread
 import org.fossify.messages.R
+import org.fossify.messages.extensions.config
 import org.fossify.messages.extensions.getConversations
 import org.fossify.messages.extensions.getMMS
 import org.fossify.messages.extensions.getLatestMMS
 import org.fossify.messages.extensions.getNameFromAddress
 import org.fossify.messages.extensions.insertOrUpdateConversation
+import org.fossify.messages.extensions.keepBlockedMessage
 import org.fossify.messages.extensions.shouldUnarchive
 import org.fossify.messages.extensions.showReceivedMessageNotification
 import org.fossify.messages.extensions.updateConversationArchivedStatus
-import org.fossify.messages.helpers.ReceiverUtils.isMessageFilteredOut
+import org.fossify.messages.helpers.BLOCK_REASON_KEYWORD
+import org.fossify.messages.helpers.BLOCK_REASON_NUMBER
+import org.fossify.messages.helpers.BLOCK_REASON_UNKNOWN
+import org.fossify.messages.helpers.ReceiverUtils.findBlockedKeyword
 import org.fossify.messages.helpers.refreshConversations
 import org.fossify.messages.helpers.refreshMessages
 import org.fossify.messages.models.Message
 
 class MmsReceiver : MmsReceivedReceiver() {
 
-    override fun isAddressBlocked(context: Context, address: String): Boolean {
-        if (context.isNumberBlocked(address)) return true
-        if (context.baseConfig.blockUnknownNumbers) {
-            val privateCursor = context.getMyContactsCursor(favoritesOnly = false, withPhoneNumbersOnly = true)
-            val result = SimpleContactsHelper(context).existsSync(address, privateCursor)
-            return result == ContactLookupResult.NotFound
-        }
+    private var blockedAddress: String? = null
+    private var blockedReason: Int? = null
 
+    override fun isAddressBlocked(context: Context, address: String): Boolean {
+        blockedAddress = address
+        val reason = getAddressBlockReason(context, address) ?: return false
+        if (!context.config.keepBlockedMessages) return true
+
+        blockedReason = reason
         return false
     }
 
     override fun isContentBlocked(context: Context, content: String): Boolean {
-        return isMessageFilteredOut(context, content)
+        val keyword = findBlockedKeyword(context, content, blockedAddress)
+        val reason = if (keyword != null) BLOCK_REASON_KEYWORD else blockedReason
+        if (reason == null) return false
+
+        blockedAddress?.let { address ->
+            context.keepBlockedMessage(address, content, System.currentTimeMillis(), -1, reason, keyword)
+        }
+        return true
+    }
+
+    private fun getAddressBlockReason(context: Context, address: String): Int? {
+        if (context.isNumberBlocked(address)) return BLOCK_REASON_NUMBER
+        if (context.baseConfig.blockUnknownNumbers) {
+            val privateCursor = context.getMyContactsCursor(favoritesOnly = false, withPhoneNumbersOnly = true)
+            val result = SimpleContactsHelper(context).existsSync(address, privateCursor)
+            if (result == ContactLookupResult.NotFound) return BLOCK_REASON_UNKNOWN
+        }
+
+        return null
     }
 
     override fun onMessageReceived(context: Context, messageUri: Uri?) {

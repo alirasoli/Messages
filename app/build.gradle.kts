@@ -33,6 +33,10 @@ android {
 
     defaultConfig {
         applicationId = project.property("APP_ID").toString()
+        applicationIdSuffix = ".blocked"
+        // Fossify commons builds the launcher alias class names from the full application ID
+        // (without ".debug"), so the aliases in the manifest must use the same prefix.
+        manifestPlaceholders["iconAliasPrefix"] = project.property("APP_ID").toString() + ".blocked"
         minSdk = project.libs.versions.app.build.minimumSDK.get().toInt()
         targetSdk = project.libs.versions.app.build.targetSDK.get().toInt()
         versionName = project.property("VERSION_NAME").toString()

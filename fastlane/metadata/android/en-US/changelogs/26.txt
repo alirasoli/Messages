@@ -1,0 +1,13 @@
+Added:
+
+• Added a Blocked messages screen to view, copy, restore to inbox, and delete messages caught by your filters
+• Added a "Keep blocked messages" setting with optional automatic deletion
+• Added an unread badge for blocked messages
+• Added a "Copy code" notification action for messages containing a 4 to 8 digit code
+• Added a setting to automatically copy verification codes to the clipboard
+• Added keyword block exceptions: an exception keyword list, plus options to not block messages containing a code or messages from your contacts
+
+Changed:
+
+• Blocked messages are now kept instead of being silently dropped
+• The app now installs alongside the official Fossify Messages with a separate .blocked app ID

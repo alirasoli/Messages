@@ -91,6 +91,37 @@ class Config(context: Context) : BaseConfig(context) {
         blockedKeywords = blockedKeywords.minus(keyword)
     }
 
+    var keywordExceptions: Set<String>
+        get() = prefs.getStringSet(KEYWORD_EXCEPTIONS, HashSet<String>())!!
+        set(keywordExceptions) = prefs.edit().putStringSet(KEYWORD_EXCEPTIONS, keywordExceptions).apply()
+
+    fun addKeywordException(keyword: String) {
+        keywordExceptions = keywordExceptions.plus(keyword)
+    }
+
+    fun removeKeywordException(keyword: String) {
+        keywordExceptions = keywordExceptions.minus(keyword)
+    }
+
+    var allowKeywordsFromContacts: Boolean
+        get() = prefs.getBoolean(ALLOW_KEYWORDS_FROM_CONTACTS, false)
+        set(allowKeywordsFromContacts) = prefs.edit()
+            .putBoolean(ALLOW_KEYWORDS_FROM_CONTACTS, allowKeywordsFromContacts).apply()
+
+    var allowKeywordsForCodes: Boolean
+        get() = prefs.getBoolean(ALLOW_KEYWORDS_FOR_CODES, true)
+        set(allowKeywordsForCodes) = prefs.edit()
+            .putBoolean(ALLOW_KEYWORDS_FOR_CODES, allowKeywordsForCodes).apply()
+
+    var keepBlockedMessages: Boolean
+        get() = prefs.getBoolean(KEEP_BLOCKED_MESSAGES, true)
+        set(keepBlockedMessages) = prefs.edit().putBoolean(KEEP_BLOCKED_MESSAGES, keepBlockedMessages).apply()
+
+    var blockedMessagesRetentionDays: Int
+        get() = prefs.getInt(BLOCKED_MESSAGES_RETENTION_DAYS, 0)
+        set(blockedMessagesRetentionDays) = prefs.edit()
+            .putInt(BLOCKED_MESSAGES_RETENTION_DAYS, blockedMessagesRetentionDays).apply()
+
     var autoCopyCode: Boolean
         get() = prefs.getBoolean(AUTO_COPY_CODE, true)
         set(autoCopyCode) = prefs.edit().putBoolean(AUTO_COPY_CODE, autoCopyCode).apply()

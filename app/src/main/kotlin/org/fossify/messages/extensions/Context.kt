@@ -1086,6 +1086,15 @@ fun Context.showReceivedMessageNotification(
     }
 }
 
+fun Context.isSavedContact(address: String): Boolean {
+    val privateCursor = getMyContactsCursor(favoritesOnly = false, withPhoneNumbersOnly = true)
+    return try {
+        getNameFromAddress(address, privateCursor) != address
+    } finally {
+        privateCursor?.close()
+    }
+}
+
 fun Context.getNameFromAddress(address: String, privateCursor: Cursor?): String {
     var sender = getNameAndPhotoFromPhoneNumber(address).name
     if (address == sender) {

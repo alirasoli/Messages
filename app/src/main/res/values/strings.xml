@@ -94,6 +94,13 @@
     <string name="manage_blocked_keywords">Manage blocked keywords</string>
     <string name="not_blocking_keywords">You are not blocking any keywords. You may add keywords here to block all messages containing them.</string>
     <string name="add_a_blocked_keyword">Add a blocked keyword</string>
+    <string name="keyword_exceptions">Keyword exceptions</string>
+    <string name="manage_keyword_exceptions">Manage keyword exceptions</string>
+    <string name="no_keyword_exceptions">You have no keyword exceptions. A message that matches a blocked keyword will not be blocked if it also contains one of these keywords.</string>
+    <string name="add_a_keyword_exception">Add a keyword exception</string>
+    <string name="allow_keywords_from_contacts">Don\'t block keywords from my contacts</string>
+    <string name="allow_keywords_for_codes">Don\'t block messages containing a code (4 to 8 digits)</string>
+    <string name="allow_keywords_contacts_permission_needed">Contacts permission is required for this option</string>
     <string name="lock_screen_visibility">Lock screen notification visibility</string>
     <string name="copy_code">Copy code</string>
     <string name="auto_copy_code">Automatically copy verification codes</string>
@@ -185,6 +192,22 @@
     <string name="faq_4_text">You need to enable \"Send group messages as MMS\" in the app settings. This will ensure that group messages are sent as proper MMS, allowing all participants to see each other\'s replies.</string>
     <string name="play">Play</string>
     <string name="pause">Pause</string>
+    <string name="blocked_messages">Blocked messages</string>
+    <string name="blocked_no_messages">No blocked messages</string>
+    <string name="blocked_keep_messages">Keep blocked messages</string>
+    <string name="blocked_retention">Delete blocked messages after</string>
+    <string name="blocked_retention_never">Never</string>
+    <string name="blocked_retention_7_days">7 days</string>
+    <string name="blocked_retention_30_days">30 days</string>
+    <string name="blocked_retention_90_days">90 days</string>
+    <string name="blocked_delete_all">Delete all</string>
+    <string name="blocked_delete_all_confirmation">Are you sure you want to delete all blocked messages?</string>
+    <string name="blocked_restore">Restore to inbox</string>
+    <string name="blocked_restored">Restored to inbox</string>
+    <string name="blocked_copy_text">Copy text</string>
+    <string name="blocked_reason_keyword">Blocked keyword: %1$s</string>
+    <string name="blocked_reason_number">Blocked number</string>
+    <string name="blocked_reason_unknown">Unknown sender</string>
     <!--
         Haven't found some strings? There's more at
         https://github.com/FossifyOrg/Commons/tree/master/commons/src/main/res

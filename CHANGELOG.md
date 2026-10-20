@@ -5,9 +5,23 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+
+## [1.11.1] - 2026-10-15
+### Fixed
+- Fixed an error when changing the app icon color
+
+## [1.11.0] - 2026-10-15
 ### Added
+- Added a Blocked messages screen to view, copy, restore to inbox, and delete messages caught by your keyword, number, and unknown-number filters
+- Added a "Keep blocked messages" setting with optional automatic deletion after a chosen number of days
+- Added an unread badge for blocked messages
 - Added a "Copy code" notification action for messages containing a 4 to 8 digit code
 - Added a setting to automatically copy verification codes to the clipboard
+- Added keyword block exceptions: an exception keyword list, plus options to not block messages containing a code or messages from your contacts
+
+### Changed
+- Blocked messages are now kept instead of being silently dropped
+- The app now installs alongside the official Fossify Messages with a separate `.blocked` app ID
 
 ## [1.10.1] - 2026-10-10
 ### Changed
@@ -302,7 +316,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 [#829]: https://github.com/FossifyOrg/Messages/issues/829
 [#834]: https://github.com/FossifyOrg/Messages/issues/834
 
-[Unreleased]: https://github.com/FossifyOrg/Messages/compare/1.10.1...HEAD
+[Unreleased]: https://github.com/alirasoli/Messages/compare/1.11.1...HEAD
+[1.11.1]: https://github.com/alirasoli/Messages/compare/1.11.0...1.11.1
+[1.11.0]: https://github.com/alirasoli/Messages/releases/tag/1.11.0
 [1.10.1]: https://github.com/FossifyOrg/Messages/compare/1.10.0...1.10.1
 [1.10.0]: https://github.com/FossifyOrg/Messages/compare/1.9.1...1.10.0
 [1.9.1]: https://github.com/FossifyOrg/Messages/compare/1.9.0...1.9.1
