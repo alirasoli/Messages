@@ -1,0 +1,11 @@
+Added:
+
+• Verification codes in messages blocked by a keyword are now still auto-copied
+
+Changed:
+
+• Removed the option to not block keyword matches that contain a code; those messages stay blocked
+
+Fixed:
+
+• Fixed a duplicate "copied" toast when copying a verification code on Android 13 and newer
