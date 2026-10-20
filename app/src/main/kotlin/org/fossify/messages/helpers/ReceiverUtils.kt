@@ -13,8 +13,14 @@ object ReceiverUtils {
     /**
      * Returns the blocked keyword matching [body], or null if the message should not be blocked
      * because of keywords. A match is ignored when one of the keyword exceptions applies.
+     * [respectContacts] skips messages from saved contacts, it follows the setting by default.
      */
-    fun findBlockedKeyword(context: Context, body: String, address: String? = null): String? {
+    fun findBlockedKeyword(
+        context: Context,
+        body: String,
+        address: String? = null,
+        respectContacts: Boolean = context.config.allowKeywordsFromContacts,
+    ): String? {
         val config = context.config
         val keyword = config.blockedKeywords.firstOrNull { body.contains(it, ignoreCase = true) }
             ?: return null
@@ -22,7 +28,7 @@ object ReceiverUtils {
         val hasExceptionKeyword = config.keywordExceptions.any { body.contains(it, ignoreCase = true) }
         if (hasExceptionKeyword) return null
 
-        if (config.allowKeywordsFromContacts && !address.isNullOrBlank() && context.isSavedContact(address)) {
+        if (respectContacts && !address.isNullOrBlank() && context.isSavedContact(address)) {
             return null
         }
 
