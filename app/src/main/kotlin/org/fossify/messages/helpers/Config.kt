@@ -108,11 +108,6 @@ class Config(context: Context) : BaseConfig(context) {
         set(allowKeywordsFromContacts) = prefs.edit()
             .putBoolean(ALLOW_KEYWORDS_FROM_CONTACTS, allowKeywordsFromContacts).apply()
 
-    var allowKeywordsForCodes: Boolean
-        get() = prefs.getBoolean(ALLOW_KEYWORDS_FOR_CODES, true)
-        set(allowKeywordsForCodes) = prefs.edit()
-            .putBoolean(ALLOW_KEYWORDS_FOR_CODES, allowKeywordsForCodes).apply()
-
     var keepBlockedMessages: Boolean
         get() = prefs.getBoolean(KEEP_BLOCKED_MESSAGES, true)
         set(keepBlockedMessages) = prefs.edit().putBoolean(KEEP_BLOCKED_MESSAGES, keepBlockedMessages).apply()

@@ -2,7 +2,6 @@ package org.fossify.messages.helpers
 
 import android.content.Context
 import org.fossify.messages.extensions.config
-import org.fossify.messages.extensions.extractVerificationCode
 import org.fossify.messages.extensions.isSavedContact
 
 object ReceiverUtils {
@@ -22,8 +21,6 @@ object ReceiverUtils {
 
         val hasExceptionKeyword = config.keywordExceptions.any { body.contains(it, ignoreCase = true) }
         if (hasExceptionKeyword) return null
-
-        if (config.allowKeywordsForCodes && body.extractVerificationCode() != null) return null
 
         if (config.allowKeywordsFromContacts && !address.isNullOrBlank() && context.isSavedContact(address)) {
             return null

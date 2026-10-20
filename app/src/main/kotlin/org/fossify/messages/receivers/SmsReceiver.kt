@@ -12,6 +12,7 @@ import org.fossify.commons.helpers.SimpleContactsHelper
 import org.fossify.commons.helpers.ensureBackgroundThread
 import org.fossify.commons.models.PhoneNumber
 import org.fossify.commons.models.SimpleContact
+import org.fossify.messages.extensions.autoCopyVerificationCode
 import org.fossify.messages.extensions.getConversations
 import org.fossify.messages.extensions.getNameFromAddress
 import org.fossify.messages.extensions.getNotificationBitmap
@@ -54,6 +55,8 @@ class SmsReceiver : BroadcastReceiver() {
 
                 val blockedKeyword = findBlockedKeyword(appContext, body, address)
                 if (blockedKeyword != null) {
+                    // the message stays blocked, but its verification code is still copied
+                    appContext.autoCopyVerificationCode(body)
                     appContext.keepBlockedMessage(
                         address, body, date, subscriptionId, BLOCK_REASON_KEYWORD, blockedKeyword
                     )

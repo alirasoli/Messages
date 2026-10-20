@@ -12,6 +12,7 @@ import org.fossify.commons.helpers.ContactLookupResult
 import org.fossify.commons.helpers.SimpleContactsHelper
 import org.fossify.commons.helpers.ensureBackgroundThread
 import org.fossify.messages.R
+import org.fossify.messages.extensions.autoCopyVerificationCode
 import org.fossify.messages.extensions.config
 import org.fossify.messages.extensions.getConversations
 import org.fossify.messages.extensions.getMMS
@@ -48,6 +49,11 @@ class MmsReceiver : MmsReceivedReceiver() {
         val keyword = findBlockedKeyword(context, content, blockedAddress)
         val reason = if (keyword != null) BLOCK_REASON_KEYWORD else blockedReason
         if (reason == null) return false
+
+        if (keyword != null) {
+            // the message stays blocked, but its verification code is still copied
+            context.autoCopyVerificationCode(content)
+        }
 
         blockedAddress?.let { address ->
             context.keepBlockedMessage(address, content, System.currentTimeMillis(), -1, reason, keyword)

@@ -5,6 +5,14 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+### Added
+- Verification codes in messages blocked by a keyword are now still auto-copied
+
+### Changed
+- Removed the option to not block keyword matches that contain a code; those messages stay blocked
+
+### Fixed
+- Fixed a duplicate "copied" toast when copying a verification code on Android 13 and newer
 
 ## [1.11.1] - 2026-10-15
 ### Fixed
