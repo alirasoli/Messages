@@ -117,6 +117,19 @@ class Config(context: Context) : BaseConfig(context) {
         set(blockedMessagesRetentionDays) = prefs.edit()
             .putInt(BLOCKED_MESSAGES_RETENTION_DAYS, blockedMessagesRetentionDays).apply()
 
+    var codeRegex: String
+        get() = prefs.getString(CODE_REGEX, DEFAULT_CODE_REGEX) ?: DEFAULT_CODE_REGEX
+        set(codeRegex) = prefs.edit().putString(CODE_REGEX, codeRegex).apply()
+
+    /** The configured code regex, falling back to the default one if it is blank or invalid. */
+    fun getCodeRegex(): Regex {
+        return try {
+            Regex(codeRegex.ifBlank { DEFAULT_CODE_REGEX })
+        } catch (_: Exception) {
+            Regex(DEFAULT_CODE_REGEX)
+        }
+    }
+
     var autoCopyCode: Boolean
         get() = prefs.getBoolean(AUTO_COPY_CODE, true)
         set(autoCopyCode) = prefs.edit().putBoolean(AUTO_COPY_CODE, autoCopyCode).apply()

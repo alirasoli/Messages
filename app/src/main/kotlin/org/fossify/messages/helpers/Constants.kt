@@ -51,6 +51,10 @@ const val CUSTOM_NOTIFICATIONS = "custom_notifications"
 const val IS_LAUNCHED_FROM_SHORTCUT = "is_launched_from_shortcut"
 const val KEEP_CONVERSATIONS_ARCHIVED = "keep_conversations_archived"
 const val AUTO_COPY_CODE = "auto_copy_code"
+const val CODE_REGEX = "code_regex"
+
+// 4 to 8 digits that are not part of a longer number and are not followed by a "/" or a "."
+const val DEFAULT_CODE_REGEX = "(?<!\\d)\\d{4,8}(?![\\d/.])"
 const val CODE = "code"
 
 private const val PATH = "org.fossify.org.fossify.messages.action."

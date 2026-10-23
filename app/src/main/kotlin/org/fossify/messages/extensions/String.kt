@@ -48,11 +48,12 @@ fun String.isPlainTextMimeType(): Boolean {
     return lowercase() == "text/plain"
 }
 
-private val VERIFICATION_CODE_REGEX = Regex("(?<!\\d)\\d{4,8}(?!\\d)")
-
 /**
- * Returns the first standalone run of 4 to 8 digits (e.g. an OTP), or null if there is none.
+ * Returns the first match of [regex] in this text, or null if there is none. When the regex has a
+ * capture group the content of the first group is used, so a regex like `code is (\\d+)` works.
  */
-fun String.extractVerificationCode(): String? {
-    return VERIFICATION_CODE_REGEX.find(this)?.value
+fun String.extractVerificationCode(regex: Regex): String? {
+    val match = regex.find(this) ?: return null
+    val code = if (match.groups.size > 1) match.groups[1]?.value ?: match.value else match.value
+    return code.takeIf { it.isNotEmpty() }
 }

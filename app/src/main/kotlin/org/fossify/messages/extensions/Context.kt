@@ -1105,7 +1105,7 @@ fun Context.copyVerificationCode(code: String) {
  */
 fun Context.autoCopyVerificationCode(body: String) {
     if (config.autoCopyCode) {
-        body.extractVerificationCode()?.let { copyVerificationCode(it) }
+        body.extractVerificationCode(config.getCodeRegex())?.let { copyVerificationCode(it) }
     }
 }
 

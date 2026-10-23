@@ -6,6 +6,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 ### Added
+- Added an Advanced settings page where the regular expression used to detect verification codes can be edited, with a live test field
 - Added a setting to clean up existing messages that contain blocked keywords, respecting keyword exceptions and your contacts
 
 ## [1.12.0] - 2026-10-20
