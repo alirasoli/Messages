@@ -593,6 +593,25 @@
                     android:text="@string/import_messages" />
 
             </RelativeLayout>
+
+            <include
+                android:id="@+id/settings_advanced_divider"
+                layout="@layout/divider" />
+
+            <RelativeLayout
+                android:id="@+id/settings_advanced_settings_holder"
+                style="@style/SettingsHolderTextViewOneLinerStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <org.fossify.commons.views.MyTextView
+                    android:id="@+id/settings_advanced_settings"
+                    style="@style/SettingsTextLabelStyle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/advanced_settings" />
+
+            </RelativeLayout>
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

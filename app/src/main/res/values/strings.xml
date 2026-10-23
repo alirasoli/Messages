@@ -100,6 +100,15 @@
     <string name="cleanup_confirm_keep">Move %d messages containing blocked keywords to Blocked messages? Messages from your contacts and messages with exception keywords are skipped.</string>
     <string name="cleanup_confirm_delete">Permanently delete %d messages containing blocked keywords? \"Keep blocked messages\" is off, so they cannot be restored. Messages from your contacts and messages with exception keywords are skipped.</string>
     <string name="cleanup_done">Cleaned up %d messages</string>
+    <string name="advanced_settings">Advanced settings</string>
+    <string name="code_detection">Verification code detection</string>
+    <string name="code_regex_description">The regular expression used to find verification codes in messages. The first match is used; if it has a capture group, the content of the first group is used.</string>
+    <string name="code_regex">Regular expression</string>
+    <string name="invalid_regex">Invalid regular expression</string>
+    <string name="reset_to_default">Reset to default</string>
+    <string name="code_regex_test_message">Test message</string>
+    <string name="regex_test_found">Code found: %s</string>
+    <string name="regex_test_none">No code found</string>
     <string name="keyword_exceptions">Keyword exceptions</string>
     <string name="manage_keyword_exceptions">Manage keyword exceptions</string>
     <string name="no_keyword_exceptions">You have no keyword exceptions. A message that matches a blocked keyword will not be blocked if it also contains one of these keywords.</string>

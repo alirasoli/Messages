@@ -127,6 +127,7 @@ class SettingsActivity : SimpleActivity() {
         setupAppPasswordProtection()
         setupMessagesExport()
         setupMessagesImport()
+        setupAdvancedSettings()
         updateTextColors(binding.settingsNestedScrollview)
 
         if (
@@ -146,6 +147,12 @@ class SettingsActivity : SimpleActivity() {
             binding.settingsMigratingLabel
         ).forEach {
             it.setTextColor(getProperPrimaryColor())
+        }
+    }
+
+    private fun setupAdvancedSettings() {
+        binding.settingsAdvancedSettingsHolder.setOnClickListener {
+            startActivity(Intent(this, AdvancedSettingsActivity::class.java))
         }
     }
 

@@ -202,7 +202,7 @@ class NotificationHelper(private val context: Context) {
             return
         }
 
-        val code = body.extractVerificationCode() ?: return
+        val code = body.extractVerificationCode(context.config.getCodeRegex()) ?: return
         val copyCodeIntent = Intent(context, CopyCodeReceiver::class.java).apply {
             action = COPY_CODE
             putExtra(CODE, code)
