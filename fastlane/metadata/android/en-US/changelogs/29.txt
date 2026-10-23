@@ -1,0 +1,4 @@
+Added:
+
+• Added an Advanced settings page where the regular expression used to detect verification codes can be edited, with a live test field
+• Added a setting to clean up existing messages that contain blocked keywords, respecting keyword exceptions and your contacts
